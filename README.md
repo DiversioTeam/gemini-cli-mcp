@@ -84,10 +84,13 @@ gemini auth login
 ### Running the Server
 
 ```bash
-# Using UV/UVX
-uvx --from . gemini-mcp
+# Method 1: Run from current directory (for development)
+uv run gemini-mcp
 
-# Or if installed
+# Method 2: Run using uvx from GitHub
+uvx --from git+https://github.com/DiversioTeam/gemini-cli-mcp gemini-mcp
+
+# Method 3: Run if installed globally
 gemini-mcp
 
 # With debug logging
@@ -224,8 +227,14 @@ This MCP server implements several security measures:
 You can add the server for local testing with Claude Code CLI:
 
 ```bash
-# Add the server for local testing
+# Method 1: Add from local directory (for development)
 claude mcp add gemini-local -- uv run gemini-mcp
+
+# Method 2: Add from PyPI (when published)
+claude mcp add gemini uvx gemini-mcp
+
+# Note: For GitHub installations, manually edit ~/.config/claude-code/mcp-settings.json
+# to add the uvx --from syntax (see configuration section above)
 
 # Then you can test the functionality immediately
 # Example: Send prompts, research topics, analyze code, etc.
