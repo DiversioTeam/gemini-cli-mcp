@@ -21,20 +21,23 @@ A Model Context Protocol (MCP) server that wraps the Gemini CLI, allowing AI ass
 
 ## Installation
 
-### Using UV/UVX (Recommended)
+### Quick Start (Recommended)
 
 ```bash
-# Install directly from the directory
-uvx --from . gemini-mcp
+# Install from GitHub (latest)
+uvx --from git+https://github.com/DiversioTeam/gemini-cli-mcp gemini-mcp
 
-# Or install in development mode
-uv pip install -e .
+# Or from PyPI (when published)
+uvx gemini-mcp
 ```
 
-### Using pip
+### Development Installation
 
 ```bash
-pip install -e .
+git clone https://github.com/DiversioTeam/gemini-cli-mcp
+cd gemini-cli-mcp
+uv sync
+uv run gemini-mcp
 ```
 
 ## Prerequisites
@@ -91,32 +94,35 @@ gemini-mcp
 LOG_LEVEL=DEBUG gemini-mcp
 ```
 
+### Configuring with Claude Code (CLI)
+
+Add this to `~/.config/claude-code/mcp-settings.json`:
+
+```json
+{
+  "servers": {
+    "gemini": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/DiversioTeam/gemini-cli-mcp.git", "gemini-mcp"]
+    }
+  }
+}
+```
+
 ### Configuring with Claude Desktop
 
 Add this to your Claude Desktop configuration:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+**Linux**: `~/.config/claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "gemini": {
       "command": "uvx",
-      "args": ["--from", "/path/to/gemini-mcp", "gemini-mcp"],
-      "env": {
-        "LOG_LEVEL": "INFO"
-      }
-    }
-  }
-}
-```
-
-Or if using Python directly:
-
-```json
-{
-  "mcpServers": {
-    "gemini": {
-      "command": "python",
-      "args": ["-m", "gemini_mcp"],
+      "args": ["--from", "git+https://github.com/DiversioTeam/gemini-cli-mcp.git", "gemini-mcp"],
       "env": {
         "LOG_LEVEL": "INFO"
       }
@@ -212,6 +218,18 @@ This MCP server implements several security measures:
    ```bash
    uv run pre-commit install
    ```
+
+### Local Testing with Claude Code
+
+You can add the server for local testing with Claude Code CLI:
+
+```bash
+# Add the server for local testing
+claude mcp add gemini-local -- uv run gemini-mcp
+
+# Then you can test the functionality immediately
+# Example: Send prompts, research topics, analyze code, etc.
+```
 
 ### Running Tests
 
