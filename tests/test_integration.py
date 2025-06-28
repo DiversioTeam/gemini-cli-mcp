@@ -4,6 +4,7 @@ import asyncio
 from unittest.mock import patch
 
 import pytest
+
 from gemini_mcp.server import GeminiMCPServer
 from gemini_mcp.tools import GeminiTools
 
@@ -11,7 +12,7 @@ from gemini_mcp.tools import GeminiTools
 class TestIntegration:
     """Integration tests for real-world scenarios."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_authentication_error_handling(self, mock_gemini_cli):
         """Test handling of Gemini CLI authentication errors."""
         tools = GeminiTools()
@@ -40,7 +41,7 @@ class TestIntegration:
 
         return MockProcess()
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_file_not_found_error(self, mock_gemini_cli, temp_directory):
         """Test handling of file not found errors."""
         tools = GeminiTools(allowed_directories=[str(temp_directory)])
@@ -50,7 +51,7 @@ class TestIntegration:
                 "Analyze this", files=[str(temp_directory / "nonexistent.txt")]
             )
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_concurrent_tool_calls(self, mock_gemini_cli, mock_subprocess):
         """Test that multiple tools can be called concurrently."""
         mock_create, mock_process = mock_subprocess
@@ -68,7 +69,7 @@ class TestIntegration:
         for result in results:
             assert result == "Mocked Gemini output"
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_large_file_handling(self, mock_gemini_cli, mock_subprocess, tmp_path):
         """Test handling of large files."""
         mock_create, mock_process = mock_subprocess
@@ -106,7 +107,7 @@ class TestIntegration:
 
         return MockAsyncFile()
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_timeout_handling(self, mock_gemini_cli):
         """Test handling of command timeouts."""
         tools = GeminiTools()
@@ -140,7 +141,7 @@ class TestIntegration:
 class TestSecurityIntegration:
     """Security-focused integration tests."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_path_traversal_prevention(self, mock_gemini_cli, tmp_path):
         """Test that path traversal attacks are prevented."""
         safe_dir = tmp_path / "safe"
@@ -164,7 +165,7 @@ class TestSecurityIntegration:
             with pytest.raises(ValueError, match="outside allowed directories"):
                 tools._validate_file_path(path)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_command_injection_prevention(self, mock_gemini_cli, mock_subprocess):
         """Test that command injection is prevented."""
         mock_create, mock_process = mock_subprocess

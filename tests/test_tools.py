@@ -6,6 +6,7 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 import pytest
+
 from gemini_mcp.tools import DEFAULT_GEMINI_MODEL, GeminiTools
 
 
@@ -79,7 +80,7 @@ class TestGeminiTools:
         with pytest.raises(ValueError, match="outside allowed directories"):
             tools._validate_file_path(str(temp_directory / ".." / ".." / "etc" / "passwd"))
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_run_gemini_command_simple(self, mock_gemini_cli, mock_subprocess):
         """Test running a simple Gemini command."""
         mock_create, mock_process = mock_subprocess
@@ -98,7 +99,7 @@ class TestGeminiTools:
 
         assert result == "Mocked Gemini output"
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_run_gemini_command_with_files(
         self, mock_gemini_cli, mock_subprocess, temp_directory
     ):
@@ -127,7 +128,7 @@ class TestGeminiTools:
         stdin_data = mock_process.communicate.call_args[1]["input"]
         assert test_file.name in stdin_data.decode()
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_run_gemini_command_error(self, mock_gemini_cli, mock_subprocess):
         """Test handling of Gemini command errors."""
         mock_create, mock_process = mock_subprocess
@@ -139,7 +140,7 @@ class TestGeminiTools:
         with pytest.raises(RuntimeError, match="Gemini CLI error: Error: Invalid prompt"):
             await tools._run_gemini_command("Bad prompt")
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_gemini_prompt(self, mock_gemini_cli, mock_subprocess):
         """Test the gemini_prompt tool."""
         mock_create, mock_process = mock_subprocess
@@ -155,7 +156,7 @@ class TestGeminiTools:
         assert "Programming languages" in call_args[prompt_index]
         assert "What is Python?" in call_args[prompt_index]
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_gemini_summarize_validation(self, mock_gemini_cli):
         """Test that summarize requires either content or files."""
         tools = GeminiTools()
@@ -164,7 +165,7 @@ class TestGeminiTools:
         result = await tools._gemini_summarize({})
         assert "Error: Either content or files must be provided" in result
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_call_tool_unknown(self, mock_gemini_cli):
         """Test calling an unknown tool raises ValueError."""
         tools = GeminiTools()
@@ -172,7 +173,7 @@ class TestGeminiTools:
         with pytest.raises(ValueError, match="Unknown tool: unknown_tool"):
             await tools.call_tool("unknown_tool", {})
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_temp_file_cleanup(self, mock_gemini_cli, mock_subprocess, temp_directory):
         """Test that temporary files are cleaned up even on error."""
         mock_create, mock_process = mock_subprocess
