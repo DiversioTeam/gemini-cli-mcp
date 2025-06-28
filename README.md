@@ -99,6 +99,18 @@ LOG_LEVEL=DEBUG gemini-mcp
 
 ### Configuring with Claude Code (CLI)
 
+#### Method 1: Using the CLI (Recommended)
+
+```bash
+# Install from GitHub (use -- separator for proper argument parsing)
+claude mcp add gemini uvx -- --from git+https://github.com/DiversioTeam/gemini-cli-mcp.git gemini-mcp
+
+# Or install from PyPI when published
+claude mcp add gemini uvx -- gemini-mcp
+```
+
+#### Method 2: Manual Configuration
+
 Add this to `~/.config/claude-code/mcp-settings.json`:
 
 ```json
@@ -228,13 +240,13 @@ You can add the server for local testing with Claude Code CLI:
 
 ```bash
 # Method 1: Add from local directory (for development)
-claude mcp add gemini-local -- uv run gemini-mcp
+claude mcp add gemini-local uv -- run gemini-mcp
 
 # Method 2: Add from PyPI (when published)
-claude mcp add gemini uvx gemini-mcp
+claude mcp add gemini uvx -- gemini-mcp
 
-# Note: For GitHub installations, manually edit ~/.config/claude-code/mcp-settings.json
-# to add the uvx --from syntax (see configuration section above)
+# Method 3: Add from GitHub (development version)
+claude mcp add gemini uvx -- --from git+https://github.com/DiversioTeam/gemini-cli-mcp.git gemini-mcp
 
 # Then you can test the functionality immediately
 # Example: Send prompts, research topics, analyze code, etc.
