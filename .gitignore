@@ -30,7 +30,6 @@ coverage.xml
 *.cover
 
 # UV
-uv.lock
 .uv/
 
 # Misc
