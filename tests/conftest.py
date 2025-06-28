@@ -39,7 +39,7 @@ async def mock_subprocess():
         mock_process.returncode = 0
         mock_process.communicate.return_value = (
             b"Mocked Gemini output",
-            b""  # stderr
+            b"",  # stderr
         )
         mock_create.return_value = mock_process
         yield mock_create, mock_process
@@ -49,26 +49,23 @@ async def mock_subprocess():
 def sample_tool_arguments():
     """Sample arguments for different tools."""
     return {
-        "gemini_prompt": {
-            "prompt": "What is the meaning of life?",
-            "model": "gemini-2.5-pro"
-        },
+        "gemini_prompt": {"prompt": "What is the meaning of life?", "model": "gemini-2.5-pro"},
         "gemini_research": {
             "topic": "Python asyncio best practices",
             "files": ["test1.txt", "test2.py"],
-            "model": "gemini-2.5-pro"
+            "model": "gemini-2.5-pro",
         },
         "gemini_analyze_code": {
             "files": ["test2.py"],
             "analysis_type": "review",
             "specific_question": "Is this code secure?",
-            "model": "gemini-2.5-pro"
+            "model": "gemini-2.5-pro",
         },
         "gemini_summarize": {
             "content": "This is a long text that needs summarization...",
             "summary_type": "brief",
-            "model": "gemini-2.5-pro"
-        }
+            "model": "gemini-2.5-pro",
+        },
     }
 
 

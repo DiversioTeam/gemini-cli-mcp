@@ -22,18 +22,21 @@ class TestIntegration:
             mock_process = asyncio.create_task(self._mock_auth_error_process())
             mock_create.return_value = await mock_process
 
-            with pytest.raises(RuntimeError, match="not authenticated|login required|authentication failed"):
+            with pytest.raises(
+                RuntimeError, match="not authenticated|login required|authentication failed"
+            ):
                 await tools._run_gemini_command("Test prompt")
 
     async def _mock_auth_error_process(self):
         """Helper to create a mock process that returns auth error."""
+
         class MockProcess:
             returncode = 1
 
             async def communicate(self, input=None):
                 return (
                     b"",
-                    b"Error: User not authenticated. Please run 'gemini auth login' first."
+                    b"Error: User not authenticated. Please run 'gemini auth login' first.",
                 )
 
         return MockProcess()
@@ -45,8 +48,7 @@ class TestIntegration:
 
         with pytest.raises(ValueError, match="File does not exist"):
             await tools._run_gemini_command(
-                "Analyze this",
-                files=[str(temp_directory / "nonexistent.txt")]
+                "Analyze this", files=[str(temp_directory / "nonexistent.txt")]
             )
 
     @pytest.mark.asyncio
@@ -58,10 +60,7 @@ class TestIntegration:
         # Create multiple concurrent tool calls
         tasks = []
         for i in range(5):
-            task = server.tools.call_tool(
-                "gemini_prompt",
-                {"prompt": f"Question {i}"}
-            )
+            task = server.tools.call_tool("gemini_prompt", {"prompt": f"Question {i}"})
             tasks.append(task)
 
         # All should complete successfully
@@ -86,15 +85,13 @@ class TestIntegration:
             mock_file = asyncio.create_task(self._mock_async_file(str(large_file)))
             mock_aiofiles.return_value = await mock_file
 
-            result = await tools._run_gemini_command(
-                "Summarize this",
-                files=[str(large_file)]
-            )
+            result = await tools._run_gemini_command("Summarize this", files=[str(large_file)])
 
             assert result == "Mocked Gemini output"
 
     async def _mock_async_file(self, filepath):
         """Helper to create a mock async file."""
+
         class MockAsyncFile:
             async def __aenter__(self):
                 return self
@@ -124,11 +121,12 @@ class TestIntegration:
             with pytest.raises(asyncio.TimeoutError):
                 await asyncio.wait_for(
                     tools._run_gemini_command("Test prompt"),
-                    timeout=0.1  # Short timeout for test
+                    timeout=0.1,  # Short timeout for test
                 )
 
     async def _mock_hanging_process(self):
         """Helper to create a mock process that hangs."""
+
         class MockProcess:
             returncode = None
 

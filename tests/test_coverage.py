@@ -48,6 +48,7 @@ class TestServerCoverage:
             import importlib
 
             import gemini_mcp.server
+
             importlib.reload(gemini_mcp.server)
 
             # Should fall back to default version
@@ -63,9 +64,7 @@ class TestToolsCoverage:
         mock_create, mock_process = mock_subprocess
         tools = GeminiTools()
 
-        result = await tools.call_tool("gemini_research", {
-            "topic": "Python best practices"
-        })
+        result = await tools.call_tool("gemini_research", {"topic": "Python best practices"})
 
         assert result == "Mocked Gemini output"
 
@@ -95,10 +94,9 @@ class TestToolsCoverage:
             mock_file.read = AsyncMock(return_value=str(test_file) + "\n")
             mock_aiofiles.return_value = mock_file
 
-            result = await tools.call_tool("gemini_analyze_code", {
-                "files": [str(test_file)],
-                "analysis_type": "review"
-            })
+            result = await tools.call_tool(
+                "gemini_analyze_code", {"files": [str(test_file)], "analysis_type": "review"}
+            )
 
             assert result == "Mocked Gemini output"
 
@@ -108,10 +106,10 @@ class TestToolsCoverage:
         mock_create, mock_process = mock_subprocess
         tools = GeminiTools()
 
-        result = await tools.call_tool("gemini_summarize", {
-            "content": "This is a long text to summarize...",
-            "summary_type": "bullet_points"
-        })
+        result = await tools.call_tool(
+            "gemini_summarize",
+            {"content": "This is a long text to summarize...", "summary_type": "bullet_points"},
+        )
 
         assert result == "Mocked Gemini output"
 
@@ -121,7 +119,9 @@ class TestToolsCoverage:
         assert "bullet points" in call_args[prompt_idx]
 
     @pytest.mark.asyncio
-    async def test_gemini_summarize_with_files(self, mock_gemini_cli, mock_subprocess, temp_directory):
+    async def test_gemini_summarize_with_files(
+        self, mock_gemini_cli, mock_subprocess, temp_directory
+    ):
         """Test gemini_summarize with files."""
         mock_create, mock_process = mock_subprocess
 
@@ -138,10 +138,9 @@ class TestToolsCoverage:
             mock_file.read = AsyncMock(return_value=str(test_file) + "\n")
             mock_aiofiles.return_value = mock_file
 
-            result = await tools.call_tool("gemini_summarize", {
-                "files": [str(test_file)],
-                "summary_type": "executive"
-            })
+            result = await tools.call_tool(
+                "gemini_summarize", {"files": [str(test_file)], "summary_type": "executive"}
+            )
 
             assert result == "Mocked Gemini output"
 
@@ -150,8 +149,10 @@ class TestToolsCoverage:
         tools = GeminiTools()
 
         # Test with path that can't be resolved
-        with patch("pathlib.Path.resolve", side_effect=Exception("Bad path")), \
-             pytest.raises(ValueError, match="Invalid file path"):
+        with (
+            patch("pathlib.Path.resolve", side_effect=Exception("Bad path")),
+            pytest.raises(ValueError, match="Invalid file path"),
+        ):
             tools._validate_file_path("/bad/path")
 
     @pytest.mark.asyncio
@@ -170,13 +171,12 @@ class TestToolsCoverage:
             close_called.append(fd)
             original_close(fd)
 
-        with patch("os.close", side_effect=track_close), \
-             patch("aiofiles.open", side_effect=Exception("Write failed")), \
-             pytest.raises(Exception, match="Write failed"):
-            await tools._run_gemini_command(
-                "Test",
-                files=[str(test_file)]
-            )
+        with (
+            patch("os.close", side_effect=track_close),
+            patch("aiofiles.open", side_effect=Exception("Write failed")),
+            pytest.raises(Exception, match="Write failed"),
+        ):
+            await tools._run_gemini_command("Test", files=[str(test_file)])
 
         # Verify fd was closed
         assert len(close_called) > 0

@@ -15,8 +15,10 @@ class TestGeminiTools:
 
     def test_initialization_without_gemini_cli(self):
         """Test initialization fails when Gemini CLI is not found."""
-        with patch("shutil.which", return_value=None), \
-             pytest.raises(RuntimeError, match="Gemini CLI not found"):
+        with (
+            patch("shutil.which", return_value=None),
+            pytest.raises(RuntimeError, match="Gemini CLI not found"),
+        ):
             GeminiTools()
 
     def test_initialization_with_gemini_cli(self, mock_gemini_cli):
@@ -98,7 +100,9 @@ class TestGeminiTools:
         assert result == "Mocked Gemini output"
 
     @pytest.mark.asyncio
-    async def test_run_gemini_command_with_files(self, mock_gemini_cli, mock_subprocess, temp_directory):
+    async def test_run_gemini_command_with_files(
+        self, mock_gemini_cli, mock_subprocess, temp_directory
+    ):
         """Test running Gemini command with file inputs."""
         mock_create, mock_process = mock_subprocess
         tools = GeminiTools(allowed_directories=[str(temp_directory)])
@@ -113,10 +117,7 @@ class TestGeminiTools:
             mock_file.read = AsyncMock(return_value=f"{test_file}\n")
             mock_aiofiles.return_value = mock_file
 
-            await tools._run_gemini_command(
-                "Analyze this file",
-                files=[str(test_file)]
-            )
+            await tools._run_gemini_command("Analyze this file", files=[str(test_file)])
 
         # Verify the -a flag was added
         call_args = mock_create.call_args[0]
@@ -145,10 +146,9 @@ class TestGeminiTools:
         mock_create, mock_process = mock_subprocess
         tools = GeminiTools()
 
-        await tools._gemini_prompt({
-            "prompt": "What is Python?",
-            "context": "Programming languages"
-        })
+        await tools._gemini_prompt(
+            {"prompt": "What is Python?", "context": "Programming languages"}
+        )
 
         # Verify the prompt was properly formatted
         call_args = mock_create.call_args[0]
@@ -190,8 +190,10 @@ class TestGeminiTools:
             temp_files_created.append(path)
             return fd, path
 
-        with patch("tempfile.mkstemp", side_effect=track_mkstemp), \
-             patch("aiofiles.open") as mock_aiofiles:
+        with (
+            patch("tempfile.mkstemp", side_effect=track_mkstemp),
+            patch("aiofiles.open") as mock_aiofiles,
+        ):
             mock_file = AsyncMock()
             mock_file.__aenter__.return_value = mock_file
             mock_file.write = AsyncMock()
@@ -201,10 +203,7 @@ class TestGeminiTools:
             mock_process.communicate.side_effect = Exception("Command failed")
 
             with pytest.raises(Exception, match="Command failed"):
-                await tools._run_gemini_command(
-                    "Test",
-                    files=[str(test_file)]
-                )
+                await tools._run_gemini_command("Test", files=[str(test_file)])
 
         # Verify temp files were cleaned up
         for temp_file in temp_files_created:

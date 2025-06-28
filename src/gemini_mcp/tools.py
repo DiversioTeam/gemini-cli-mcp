@@ -148,10 +148,7 @@ class GeminiTools:
                             "default": DEFAULT_GEMINI_MODEL,
                         },
                     },
-                    "anyOf": [
-                        {"required": ["content"]},
-                        {"required": ["files"]}
-                    ],
+                    "anyOf": [{"required": ["content"]}, {"required": ["files"]}],
                 },
             ),
         ]
@@ -236,10 +233,10 @@ class GeminiTools:
                     validated_paths.append(str(validated_path))
 
                 # Create a temporary file listing all files to include
-                fd, temp_file_list = tempfile.mkstemp(suffix='.txt', text=True)
+                fd, temp_file_list = tempfile.mkstemp(suffix=".txt", text=True)
                 try:
                     # Write file paths asynchronously
-                    async with aiofiles.open(fd, mode='w', closefd=True) as f:
+                    async with aiofiles.open(fd, mode="w", closefd=True) as f:
                         for path in validated_paths:
                             await f.write(f"{path}\n")
 
@@ -253,6 +250,7 @@ class GeminiTools:
                 except Exception:
                     # Ensure fd is closed if aiofiles fails
                     import contextlib
+
                     with contextlib.suppress(Exception):
                         os.close(fd)
                     raise
@@ -274,7 +272,10 @@ class GeminiTools:
                 error_msg = stderr.decode().strip()
 
                 # Check for authentication errors
-                if any(phrase in error_msg.lower() for phrase in ["not authenticated", "login required", "auth", "credentials"]):
+                if any(
+                    phrase in error_msg.lower()
+                    for phrase in ["not authenticated", "login required", "auth", "credentials"]
+                ):
                     raise RuntimeError(
                         f"Gemini CLI authentication error: {error_msg}\n"
                         "Please run 'gemini auth login' to authenticate."
@@ -382,4 +383,3 @@ Be thorough but concise."""
                 model=model,
                 files=files,
             )
-

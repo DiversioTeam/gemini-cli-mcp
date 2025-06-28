@@ -61,10 +61,7 @@ class TestGeminiMCPServer:
         server = GeminiMCPServer()
 
         # Call the tool directly
-        result = await server.tools.call_tool(
-            "gemini_prompt",
-            {"prompt": "Hello, Gemini!"}
-        )
+        result = await server.tools.call_tool("gemini_prompt", {"prompt": "Hello, Gemini!"})
 
         assert result == "Mocked Gemini output"
 
@@ -75,10 +72,7 @@ class TestGeminiMCPServer:
 
         # Test with an invalid tool name
         with pytest.raises(ValueError, match="Unknown tool"):
-            await server.tools.call_tool(
-                "invalid_tool",
-                {"prompt": "Test"}
-            )
+            await server.tools.call_tool("invalid_tool", {"prompt": "Test"})
 
     def test_set_logging_level(self, mock_gemini_cli):
         """Test that server can be initialized (logging is set during handler registration)."""
@@ -108,11 +102,7 @@ async def test_server_integration(mock_gemini_cli, mock_subprocess):
 
     # 2. Call a tool
     result = await server.tools.call_tool(
-        "gemini_prompt",
-        {
-            "prompt": "What is the capital of France?",
-            "model": "gemini-2.5-pro"
-        }
+        "gemini_prompt", {"prompt": "What is the capital of France?", "model": "gemini-2.5-pro"}
     )
 
     assert result == "Mocked Gemini output"

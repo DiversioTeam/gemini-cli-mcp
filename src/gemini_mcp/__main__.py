@@ -105,7 +105,10 @@ def test_gemini() -> None:
             console.print(f"Error: {error_msg}")
 
             # Check for common authentication errors
-            if any(phrase in error_msg.lower() for phrase in ["not authenticated", "login required", "auth", "credentials"]):
+            if any(
+                phrase in error_msg.lower()
+                for phrase in ["not authenticated", "login required", "auth", "credentials"]
+            ):
                 console.print("\n[yellow]It looks like you're not authenticated.[/yellow]")
                 console.print("Please run: [cyan]gemini auth login[/cyan]")
     except subprocess.TimeoutExpired:
@@ -157,10 +160,7 @@ def setup_check() -> None:
         console.print("[yellow]2. Checking Gemini CLI version...[/yellow]")
         try:
             result = subprocess.run(
-                ["gemini", "--version"],
-                capture_output=True,
-                text=True,
-                timeout=5
+                ["gemini", "--version"], capture_output=True, text=True, timeout=5
             )
             if result.returncode == 0:
                 console.print(f"[green]✓ Version: {result.stdout.strip()}[/green]\n")
@@ -173,16 +173,16 @@ def setup_check() -> None:
         console.print("[yellow]3. Checking authentication...[/yellow]")
         try:
             result = subprocess.run(
-                ["gemini", "-p", "Hello"],
-                capture_output=True,
-                text=True,
-                timeout=10
+                ["gemini", "-p", "Hello"], capture_output=True, text=True, timeout=10
             )
             if result.returncode == 0:
                 console.print("[green]✓ Authentication working[/green]\n")
             else:
                 error_msg = result.stderr.strip()
-                if any(phrase in error_msg.lower() for phrase in ["not authenticated", "login required", "auth"]):
+                if any(
+                    phrase in error_msg.lower()
+                    for phrase in ["not authenticated", "login required", "auth"]
+                ):
                     console.print("[red]✗ Not authenticated[/red]")
                     console.print("   Run: [cyan]gemini auth login[/cyan]\n")
                     all_good = False
@@ -221,4 +221,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

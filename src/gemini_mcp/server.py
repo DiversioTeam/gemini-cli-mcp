@@ -112,4 +112,3 @@ class GeminiMCPServer:
                 write_stream,
                 init_options,
             )
-
