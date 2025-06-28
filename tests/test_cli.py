@@ -3,7 +3,6 @@
 from unittest.mock import Mock, patch
 
 from click.testing import CliRunner
-
 from gemini_mcp.__main__ import cli
 
 

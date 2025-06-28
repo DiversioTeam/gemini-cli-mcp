@@ -35,7 +35,6 @@ dev = [
     "pytest-cov>=4.0.0",
     "ruff>=0.4.0",
     "mypy>=1.10.0",
-    "bandit[toml]>=1.7.0",
     "safety>=3.0.0",
     "pre-commit>=3.0.0",
 ]
@@ -68,6 +67,7 @@ select = [
     "I",   # isort
     "N",   # pep8-naming
     "B",   # flake8-bugbear
+    "S",   # flake8-bandit (security)
     "RUF", # ruff-specific rules
     "SIM", # flake8-simplify
     "TCH", # flake8-type-checking
@@ -81,6 +81,11 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]  # Allow assert in tests
+"src/gemini_mcp/__main__.py" = [
+    "S404",  # subprocess import - needed for CLI diagnostics
+    "S603",  # subprocess without shell=True - safe with hardcoded args
+    "S607",  # partial path - gemini CLI must be in PATH
+]
 
 [tool.mypy]
 python_version = "3.10"
@@ -96,6 +101,11 @@ warn_unused_ignores = true
 warn_no_return = true
 follow_imports = "normal"
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -123,9 +133,6 @@ exclude_lines = [
     "if TYPE_CHECKING:",
 ]
 
-[tool.bandit]
-exclude_dirs = ["tests", ".venv", "venv", "build", "dist"]
-skips = ["B101"]  # Skip assert_used test
 
 [dependency-groups]
 dev = [

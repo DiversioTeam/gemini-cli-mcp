@@ -10,7 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 
-@pytest.fixture
+@pytest.fixture()
 def mock_gemini_cli():
     """Mock the gemini CLI being available."""
     with patch("shutil.which") as mock_which:
@@ -18,7 +18,7 @@ def mock_gemini_cli():
         yield mock_which
 
 
-@pytest.fixture
+@pytest.fixture()
 def temp_directory(tmp_path):
     """Create a temporary directory for testing file operations."""
     # Create some test files
@@ -31,7 +31,7 @@ def temp_directory(tmp_path):
     return tmp_path
 
 
-@pytest.fixture
+@pytest.fixture()
 async def mock_subprocess():
     """Mock asyncio subprocess for testing command execution."""
     with patch("asyncio.create_subprocess_exec") as mock_create:
@@ -45,7 +45,7 @@ async def mock_subprocess():
         yield mock_create, mock_process
 
 
-@pytest.fixture
+@pytest.fixture()
 def sample_tool_arguments():
     """Sample arguments for different tools."""
     return {
@@ -69,7 +69,7 @@ def sample_tool_arguments():
     }
 
 
-@pytest.fixture
+@pytest.fixture()
 def mock_server_streams():
     """Mock the stdio streams for server testing."""
     read_stream = AsyncMock()

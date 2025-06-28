@@ -239,7 +239,7 @@ uv run ruff format .
 uv run mypy src/
 
 # Run security checks
-uv run bandit -r src/
+uv run ruff check --select S .
 ```
 
 ## Troubleshooting

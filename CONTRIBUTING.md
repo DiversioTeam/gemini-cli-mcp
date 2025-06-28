@@ -49,16 +49,16 @@ By participating in this project, you agree to be respectful and constructive in
    ```bash
    # Run all tests
    uv run pytest
-   
+
    # Check code style
    uv run ruff check .
    uv run ruff format .
-   
+
    # Type checking
    uv run mypy src/
-   
+
    # Security checks
-   uv run bandit -r src/
+   uv run ruff check --select S .
    ```
 
 6. **Commit Your Changes**

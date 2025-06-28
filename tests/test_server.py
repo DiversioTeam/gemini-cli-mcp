@@ -4,7 +4,6 @@ import os
 from unittest.mock import patch
 
 import pytest
-
 from gemini_mcp.server import GeminiMCPServer, __version__
 
 
@@ -54,7 +53,7 @@ class TestGeminiMCPServer:
         assert "gemini_analyze_code" in tool_names
         assert "gemini_summarize" in tool_names
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_call_tool_success(self, mock_gemini_cli, mock_subprocess):
         """Test successful tool execution."""
         mock_create, mock_process = mock_subprocess
@@ -65,7 +64,7 @@ class TestGeminiMCPServer:
 
         assert result == "Mocked Gemini output"
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_call_tool_error(self, mock_gemini_cli):
         """Test tool execution error handling."""
         server = GeminiMCPServer()
@@ -88,7 +87,7 @@ class TestGeminiMCPServer:
         assert isinstance(__version__, str)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_server_integration(mock_gemini_cli, mock_subprocess):
     """Integration test for the full server flow."""
     mock_create, mock_process = mock_subprocess

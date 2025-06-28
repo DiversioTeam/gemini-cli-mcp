@@ -4,7 +4,6 @@ import os
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from gemini_mcp.server import GeminiMCPServer
 from gemini_mcp.tools import GeminiTools
 
@@ -12,7 +11,7 @@ from gemini_mcp.tools import GeminiTools
 class TestServerCoverage:
     """Additional server tests for coverage."""
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_server_run_method(self, mock_gemini_cli):
         """Test the server run method (coverage for async context manager)."""
         server = GeminiMCPServer()
@@ -58,7 +57,7 @@ class TestServerCoverage:
 class TestToolsCoverage:
     """Additional tools tests for coverage."""
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_gemini_research_tool(self, mock_gemini_cli, mock_subprocess):
         """Test the gemini_research tool."""
         mock_create, mock_process = mock_subprocess
@@ -75,7 +74,7 @@ class TestToolsCoverage:
         assert "Python best practices" in call_args[prompt_idx]
         assert "comprehensive analysis" in call_args[prompt_idx]
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_gemini_analyze_code_tool(self, mock_gemini_cli, mock_subprocess, temp_directory):
         """Test the gemini_analyze_code tool."""
         mock_create, mock_process = mock_subprocess
@@ -100,7 +99,7 @@ class TestToolsCoverage:
 
             assert result == "Mocked Gemini output"
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_gemini_summarize_with_content(self, mock_gemini_cli, mock_subprocess):
         """Test gemini_summarize with content instead of files."""
         mock_create, mock_process = mock_subprocess
@@ -118,7 +117,7 @@ class TestToolsCoverage:
         prompt_idx = call_args.index("-p") + 1
         assert "bullet points" in call_args[prompt_idx]
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_gemini_summarize_with_files(
         self, mock_gemini_cli, mock_subprocess, temp_directory
     ):
@@ -155,7 +154,7 @@ class TestToolsCoverage:
         ):
             tools._validate_file_path("/bad/path")
 
-    @pytest.mark.asyncio
+    @pytest.mark.asyncio()
     async def test_file_descriptor_cleanup_on_write_error(self, mock_gemini_cli, temp_directory):
         """Test that file descriptors are closed even if aiofiles write fails."""
         tools = GeminiTools(allowed_directories=[str(temp_directory)])
