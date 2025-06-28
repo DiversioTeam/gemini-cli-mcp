@@ -3,6 +3,7 @@
 import logging
 import os
 from importlib import metadata
+from logging import CRITICAL as LOG_CRITICAL
 from logging import DEBUG as LOG_DEBUG
 from logging import ERROR as LOG_ERROR
 from logging import INFO as LOG_INFO
@@ -89,8 +90,12 @@ class GeminiMCPServer:
             level_map: dict[str, int] = {
                 "debug": LOG_DEBUG,
                 "info": LOG_INFO,
+                "notice": LOG_INFO,  # Python logging doesn't have NOTICE, map to INFO
                 "warning": LOG_WARNING,
                 "error": LOG_ERROR,
+                "critical": LOG_CRITICAL,
+                "alert": LOG_CRITICAL,  # Python logging doesn't have ALERT, map to CRITICAL
+                "emergency": LOG_CRITICAL,  # Python logging doesn't have EMERGENCY, map to CRITICAL
             }
             logging.getLogger().setLevel(level_map.get(level, LOG_INFO))
 
