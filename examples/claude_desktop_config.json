@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "gemini": {
+      "command": "uvx",
+      "args": ["--from", "/Users/monty/work/diversio/gemini_cli_mcp", "gemini-mcp"],
+      "description": "Gemini CLI integration for research and analysis"
+    }
+  }
+}

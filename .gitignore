@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.coverage
+.coverage.*
+.pytest_cache/
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+
+# UV
+uv.lock
+.uv/
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.local
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff
+.ruff_cache/
