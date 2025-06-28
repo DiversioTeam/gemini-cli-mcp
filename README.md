@@ -240,7 +240,7 @@ You can add the server for local testing with Claude Code CLI:
 
 ```bash
 # Method 1: Add from local directory (for development)
-claude mcp add gemini-local uv -- run gemini-mcp
+claude mcp add gemini-local -- uv run gemini-mcp
 
 # Method 2: Add from PyPI (when published)
 claude mcp add gemini uvx -- gemini-mcp

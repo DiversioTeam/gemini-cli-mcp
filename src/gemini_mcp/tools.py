@@ -148,7 +148,7 @@ class GeminiTools:
                             "default": DEFAULT_GEMINI_MODEL,
                         },
                     },
-                    "anyOf": [{"required": ["content"]}, {"required": ["files"]}],
+                    "required": [],
                 },
             ),
         ]
