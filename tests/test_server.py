@@ -33,7 +33,7 @@ class TestGeminiMCPServer:
         dir1.mkdir()
         dir2.mkdir()
 
-        with patch.dict(os.environ, {"GEMINI_MCP_ALLOWED_DIRS": f"{dir1}:{dir2}"}):
+        with patch.dict(os.environ, {"GEMINI_MCP_ALLOWED_DIRS": f"{dir1}{os.pathsep}{dir2}"}):
             server = GeminiMCPServer()
             assert len(server.tools.allowed_directories) == 2
             allowed_paths = [str(d) for d in server.tools.allowed_directories]

@@ -44,7 +44,8 @@ class GeminiMCPServer:
             # Check for environment variable
             env_dirs = os.environ.get("GEMINI_MCP_ALLOWED_DIRS")
             if env_dirs:
-                allowed_directories = [d.strip() for d in env_dirs.split(":") if d.strip()]
+                # Use os.pathsep for platform-specific path separator
+                allowed_directories = [d.strip() for d in env_dirs.split(os.pathsep) if d.strip()]
             else:
                 # Default to current working directory
                 allowed_directories = [str(Path.cwd())]
@@ -82,10 +83,10 @@ class GeminiMCPServer:
             """Set the logging level."""
             logger.info(f"Setting logging level to: {level}")
             level_map = {
-                LoggingLevel.DEBUG: logging.DEBUG,  # type: ignore[attr-defined]
-                LoggingLevel.INFO: logging.INFO,  # type: ignore[attr-defined]
-                LoggingLevel.WARNING: logging.WARNING,  # type: ignore[attr-defined]
-                LoggingLevel.ERROR: logging.ERROR,  # type: ignore[attr-defined]
+                LoggingLevel.DEBUG: logging.DEBUG,
+                LoggingLevel.INFO: logging.INFO,
+                LoggingLevel.WARNING: logging.WARNING,
+                LoggingLevel.ERROR: logging.ERROR,
             }
             logging.getLogger().setLevel(level_map.get(level, logging.INFO))
 

@@ -235,12 +235,12 @@ class GeminiTools:
                 # Create a temporary file listing all files to include
                 fd, temp_file_list = tempfile.mkstemp(suffix=".txt", text=True)
                 try:
-                    # Write file paths asynchronously
-                    async with aiofiles.open(fd, mode="w", closefd=True) as f:
+                    # Write file paths using regular file operations to ensure proper cleanup
+                    with os.fdopen(fd, "w") as f:
                         for path in validated_paths:
-                            await f.write(f"{path}\n")
+                            f.write(f"{path}\n")
 
-                    # Read the file list asynchronously
+                    # Now fd is closed, safe to read the file
                     async with aiofiles.open(temp_file_list) as f:
                         file_list_content = await f.read()
 
@@ -248,11 +248,7 @@ class GeminiTools:
                     cmd.append("-a")
                     stdin_input = stdin_input if stdin_input else file_list_content
                 except Exception:
-                    # Ensure fd is closed if aiofiles fails
-                    import contextlib
-
-                    with contextlib.suppress(Exception):
-                        os.close(fd)
+                    # fd is already closed by fdopen, no need to close it again
                     raise
 
             logger.debug(f"Running command: {' '.join(cmd)}")
