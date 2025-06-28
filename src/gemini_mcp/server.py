@@ -3,6 +3,10 @@
 import logging
 import os
 from importlib import metadata
+from logging import DEBUG as LOG_DEBUG
+from logging import ERROR as LOG_ERROR
+from logging import INFO as LOG_INFO
+from logging import WARNING as LOG_WARNING
 from pathlib import Path
 from typing import Any
 
@@ -82,13 +86,13 @@ class GeminiMCPServer:
         async def set_logging_level(level: LoggingLevel) -> None:
             """Set the logging level."""
             logger.info(f"Setting logging level to: {level}")
-            level_map = {
-                LoggingLevel.DEBUG: logging.DEBUG,
-                LoggingLevel.INFO: logging.INFO,
-                LoggingLevel.WARNING: logging.WARNING,
-                LoggingLevel.ERROR: logging.ERROR,
+            level_map: dict[str, int] = {
+                "debug": LOG_DEBUG,
+                "info": LOG_INFO,
+                "warning": LOG_WARNING,
+                "error": LOG_ERROR,
             }
-            logging.getLogger().setLevel(level_map.get(level, logging.INFO))
+            logging.getLogger().setLevel(level_map.get(level, LOG_INFO))
 
     async def run(self) -> None:
         """Run the MCP server."""
